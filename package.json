@@ -1,0 +1,27 @@
+{
+  "name": "api_favoritos",
+  "version": "1.0.0",
+  "description": "app de enlaces a paginas de favoritos con tecnologia m.e.a.n",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexMonz/api_favoritos.git"
+  },
+  "author": "Alex Monzon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexMonz/api_favoritos/issues"
+  },
+  "homepage": "https://github.com/AlexMonz/api_favoritos#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
