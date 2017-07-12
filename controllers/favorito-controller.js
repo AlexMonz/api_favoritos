@@ -1,4 +1,6 @@
+'use strict'
 
+var Favorito = require('../models/model-favorito');
 
 function prueba(req, res){ // funcion de call-back
 
@@ -20,36 +22,129 @@ function getFavorito(req, res){
 
 	var favoritoId = req.params.id;
 
-	res.status(200).send({data: favoritoId});
+	Favorito.findById(favoritoId, function(err, favorito){
+
+		if(err){
+			res.status(500).send({message: 'Error al devolver el marcador'});
+		}else{
+			if(!favorito){
+			res.status(404).send({message: 'No hay marcadores'});
+		
+		}else{
+
+			res.status(200).send({favorito});
+
+			}
+
+		}
+	});
+
+	
 
 }
 
 function getFavoritos(req, res){
+
+	Favorito.find({}).sort('-_id').exec((err, favoritos)=>{
+
+		if(err){
+
+			res.status(500).send({message: 'Error al devolver los marcadores'});
+			// status 500 error en el servidor al procesar algo.
+		}else{
+			if(!favoritos){
+			res.status(404).send({messange: 'No hay marcadores'});
+
+			}else{
+
+			res.status(200).send({favoritos});
+		}
+
+		}
+
+	});
 
 
 }
 
 function saveFavorito(req, res){
 
+	var favorito = new Favorito();
+
 	var params = req.body;
 
-	res.status(200).send({favorito: params});
+	favorito.title = params.title;
+	favorito.description = params.description;
+	favorito.url = params.url;
+
+	favorito.save((err, favoritoStored) =>{
+
+		if(err){
+
+			res.status(500).send({message: 'Error al guardar el marcador'});
+			// status 500 error en el servidor al procesar algo.
+		}else{
+
+			res.status(200).send({favorito: favoritoStored});
+
+		}
+
+	});
 
 }
 
 function updateFavorito(req, res){
 
-	var params = req.body;
+	var favoritoId = req.params.id;
+	var update = req.body;
 
-	res.status(200).send({update: true, favorito: params});
+
+	Favorito.findByIdAndUpdate(favoritoId, update, (err, favoritoUpdate) =>{
+
+			if(err){
+
+				res.status(500).send({message: 'Error al actualizar el marcador'});
+				// status 500 error en el servidor al procesar algo.
+			}else{
+
+				res.status(200).send({favorito: favoritoUpdate});
+
+			}
+
+	});
+
+
+
+	
 
 }
 
 function deleteFavorito(req, res){
 
-	var favoritoId = req.params.id;
+		var favoritoId = req.params.id;
 
-	res.status(200).send({delete: true, data: favoritoId});
+		Favorito.findById(favoritoId, function(err, favorito){
+
+		if(err){
+			res.status(500).send({message: 'Error al devolver el marcador'});
+		}if(!favorito){
+			res.status(404).send({message: 'No hay marcadores'});
+		}else{
+
+			favorito.remove(err => {
+
+				if(err){
+					res.status(500).send({message: 'Error al eliminar el marcador'});
+				}else{
+					res.status(200).send({messaje: 'El marcador se ha eliminado'});
+				}
+
+			});
+			
+		}
+
+			
+	});
 
 }
 
